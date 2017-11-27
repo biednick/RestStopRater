@@ -6,7 +6,7 @@ This project was done by Nick Biederman, Rob Boekermann, and Zack Sullivan for C
 
 
 
-##To Do:
+## To Do:
 
 
 [x] Make Twitter Account (@RestStopRater)
@@ -22,6 +22,6 @@ This project was done by Nick Biederman, Rob Boekermann, and Zack Sullivan for C
 [ ] List for ADT
 
 
-##Tweet Format:
+## Tweet Format:
 
 Location: F:x B:x S:5 I:x
