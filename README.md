@@ -5,6 +5,10 @@ Using a simple Python script, this twitter bot reads ratings from
 This project was done by Nick Biederman, Rob Boekermann, and Zack Sullivan for CS2021 at the University of Cincinnati. 
 
 
+## Required Packages
+
+This script uses the python twitter package. Install using '$ pip install python-twitter' for python 2 or '$ pip3 install python-twitter' for python 3.
+
 
 ## To Do:
 
