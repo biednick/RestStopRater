@@ -7,7 +7,7 @@ This project was done by Nick Biederman, Rob Boekermann, and Zack Sullivan for C
 
 ## Required Packages
 
-This script uses the python twitter package. Install using '$ pip install python-twitter' for python 2 or '$ pip3 install python-twitter' for python 3.
+This script uses the python twitter package. Install using `$ pip install python-twitter` for python 2 or `$ pip3 install python-twitter` for python 3.
 
 
 ## To Do:
@@ -15,7 +15,7 @@ This script uses the python twitter package. Install using '$ pip install python
 
 [x] Make Twitter Account (@RestStopRater)
 
-[ ] ADT- Name, Ratings, rating count
+[x] ADT- Name, Ratings, rating count
 
 [ ] Post every 12-24 hours
 
