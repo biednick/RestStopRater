@@ -6,12 +6,14 @@
 ###########################ADTs: 'Reviews' NODE, TREE#################################################################################
 ######################################################################################################################################
 class Reviews:
+    name = ""
     bathroom_rating = 0
     food_rating = 0
     scenery_rating = 0
     information_rating = 0
     number_of_reviews = 0
-    def __init__(self):
+    def __init__(self, nameIn):
+        self.name = nameIn
         self.bathroom_rating = 0
         self.food_rating = 0
         self.scenery_rating = 0
@@ -38,7 +40,7 @@ def readFile():                      #Opens a text file, reads each line, puts a
         if (isInt(line)):
             x = int(line)
             ratings.append(x)
-        elif len(line) != 0
+        elif len(line) == 0:
             print(line)
             name = line
     print(name)
@@ -72,3 +74,32 @@ def writeFile(name, ratings):
 #############################################################################################################################################
 #############################SEND TWEET: TWEETS TOP RATED REST STOPS#########################################################################
 #############################################################################################################################################
+
+def sendTweet():
+    postUpdates(makeStatus())
+
+def getHighest():
+    return Reviews("I-75 MM 27 [NB]")
+def makeStatus():
+    status = "#1: "
+    top = getHighest()
+    status += makeLine(top)
+    status += "#2: "
+    status += makeLine(top)
+    status += "#3: "
+    status += makeLine(top)
+    print(status)
+def makeLine(top):
+    line = ""
+    line += top.name
+    line += ": B:"
+    line += str(top.bathroom_rating)
+    line += ", F:"
+    line += str(top.food_rating)
+    line += ", S:"
+    line += str(top.scenery_rating)
+    line += ", I:"
+    line += str(top.information_rating)
+    line += "\r\n"
+    return line
+    
