@@ -1,34 +1,69 @@
 #Nick Biederman, Rob Boeckermann, Zack Sullivan
-#Python FInal Project:
+#Python Final Project:
 #Rest Stop Rater
 
 ######################################################################################################################################
-###########################ADTs: 'Reviews' NODE, TREE#################################################################################
+###########################ADTs: 'Reviews' NODE, LINKED LIST##########################################################################
 ######################################################################################################################################
 class Reviews:
+    """
+    >>> test = Reviews("RS1")
+    >>> test.add(5,5,5,5)
+    >>> test.add(3,3,3,3)
+    >>> test.getBathroomRating()
+    4.0
+    >>> test.add(5,5,5,5)
+    >>> test.getAverageRating()
+    4.33
+    """
     name = ""
-    bathroom_rating = 0
-    food_rating = 0
-    scenery_rating = 0
-    information_rating = 0
-    number_of_reviews = 0
+    bathroomRating = 0
+    foodRating = 0
+    sceneryRating = 0
+    informationRating = 0
+    numberOfReviews = 0
+    nextPointer = None
     def __init__(self, nameIn):
         self.name = nameIn
-        self.bathroom_rating = 0
-        self.food_rating = 0
-        self.scenery_rating = 0
-        self.information_rating = 0
-        self.number_of_reviews = 0
+        self.bathroomRating = 0
+        self.foodRating = 0
+        self.sceneryRating = 0
+        self.informationRating = 0
+        self.numberOfReviews = 0
+        self.nextPointer = None
     def add(self, b, f, s, i):
-        self.bathroom_rating += b
-        self.food_rating += f
-        self.scenery_rating += s
-        self.information_rating += i
-        self.number_of_reviews += 1
+        self.bathroomRating += b
+        self.foodRating += f
+        self.sceneryRating += s
+        self.informationRating += i
+        self.numberOfReviews += 1
+    def getBathroomRating(self):
+        return round(self.bathroomRating / self.numberOfReviews, 2)
+    def getFoodRating(self):
+        return round(self.foodRating / self.numberOfReviews, 2)
+    def getSceneryRating(self):
+        return round(self.sceneryRating / self.numberOfReviews, 2)
+    def getInformationRating(self):
+        return round(self.informationRating / self.numberOfReviews, 2)
     def getAverageRating(self):
-        return ((bathroom_rating / number_of_reviews) + (food_rating / number_of_reviews) + (scenery_rating / number_of_reviews) + (information_rating / number_of_reviews)) / 4
+        return round((self.getBathroomRating() + self.getFoodRating() + self.getSceneryRating() + self.getInformationRating()) / 4, 2)
+    def setNext(self, newNext):
+        self.nextPointer = newNext
+        
+class reviewsList:
+    def __init__ (self, head = None):
+        self.head = head
 
+    def insert(self, nameIn):
+        newNode = Reviews(nameIn)
+        newNode.setNext(self.head)
+        self.head = newNode
 
+    def display(self):
+        head = self.head
+        while(head):
+            print(head.name)
+    
 #########################################################################################################################################
 ##########################DATA PARSING- READS AND WRITES .txt, CALCULATES BEST REST STOP#################################################
 #########################################################################################################################################
@@ -69,7 +104,13 @@ def writeFile(name, ratings):
 #############################################################################################################################################
 #############################GET TWEETS: READS FROM TWITTER, WRITES TO ADT###################################################################
 #############################################################################################################################################
+LID = 0 #import last id
 
+def getTweets():
+    twitter.GetMentions(count=200, since_id=LID, max_id=None, trim_user=True, contributor_details=False, include_entities=False, return_json=False)
+    print (twitter.Status)
+    LID = id;
+#export LID
 
 #############################################################################################################################################
 #############################SEND TWEET: TWEETS TOP RATED REST STOPS#########################################################################
@@ -93,13 +134,13 @@ def makeLine(top):
     line = ""
     line += top.name
     line += ": B:"
-    line += str(top.bathroom_rating)
+    line += str(top.bathroomRating)
     line += ", F:"
-    line += str(top.food_rating)
+    line += str(top.foodRating)
     line += ", S:"
-    line += str(top.scenery_rating)
+    line += str(top.sceneryRating)
     line += ", I:"
-    line += str(top.information_rating)
+    line += str(top.informationRating)
     line += "\r\n"
     return line
     
