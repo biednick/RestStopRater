@@ -2,6 +2,14 @@
 #Python Final Project:
 #Rest Stop Rater
 
+
+import twitter
+
+api = twitter.Api(consumer_key=['kD1k9NfDeNsaIzXr0EIUldahk'],
+                  consumer_secret=['wSdRUZD9XEB5CxOEhciFK812QNQDonApxiM0z3sFTWXZbiGHkp'],
+                  access_token_key=['35197823255109634-5AXvEZLKBrBU2iIqF74JQKeqDcY4f5g'],
+                  access_token_secret=['E6R8dHRAE5r4245LDAkpT894R8z0GluSucRFFyNs7CHVY'])
+
 ######################################################################################################################################
 ###########################ADTs: 'Reviews' NODE, LINKED LIST##########################################################################
 ######################################################################################################################################
@@ -23,13 +31,13 @@ class Reviews:
     informationRating = 0
     numberOfReviews = 0
     nextPointer = None
-    def __init__(self, nameIn):
+    def __init__(self, nameIn, b=0, f=0, s=0, i=0, r=0):
         self.name = nameIn
-        self.bathroomRating = 0
-        self.foodRating = 0
-        self.sceneryRating = 0
-        self.informationRating = 0
-        self.numberOfReviews = 0
+        self.bathroomRating = b
+        self.foodRating = f
+        self.sceneryRating = s
+        self.informationRating = i
+        self.numberOfReviews = r
         self.nextPointer = None
     def add(self, b, f, s, i):
         self.bathroomRating += b
@@ -54,35 +62,57 @@ class reviewsList:
     def __init__ (self, head = None):
         self.head = head
 
-    def insert(self, nameIn):
-        newNode = Reviews(nameIn)
+    def insert(self, nameIn, b = 0, f = 0, s = 0, i = 0, r = 0):
+        newNode = Reviews(nameIn, b, f, s, i, r)
         newNode.setNext(self.head)
         self.head = newNode
 
     def display(self):
-        head = self.head
-        while(head):
-            print(head.name)
+        currentNode = self.head
+        while(currentNode):
+            print(currentNode.name)
+            currentNode = currentNode.nextPointer
+            
+    def findHighest(self):
+        currentNode = self.head
+        previousNode = None
+        topVal = 0
+        topNode = currentNode
+        while (currentNode):
+            if (currentNode.getAverageRating() > topVal):
+                print(currentNode.getAverageRating())
+                topVal = currentNode.getAverageRating()
+                topNode = currentNode
+        return topNode
     
 #########################################################################################################################################
 ##########################DATA PARSING- READS AND WRITES .txt, CALCULATES BEST REST STOP#################################################
 #########################################################################################################################################
 def readFile():                      #Opens a text file, reads each line, puts any ints in a list and saves a string
                                      #This layout relies heavily on properly sanatizing inputs before writing to the .txt
+    """
+    >>> test = readFile()
+    >>> test.head.getBathroomRating()
+    5
+    >>> test.head.getAverageRating()
+    4.25
+    >>> test.head.nextPointer.getBathroomRating()
+    4
+    >>> 
+    """
+    _reviewsList = reviewsList()
     inFile = open("ratings.txt", 'r')
     ratings = []
     for line in inFile:
-        if (isInt(line)):
+        if (isInt(line)): #rating
             x = int(line)
             ratings.append(x)
-        elif len(line) == 0:
-            print(line)
+        elif (line == "_"): #end of current location rating
+            _reviewsList.insert(name, ratings[0], ratings[1], ratings[2], ratings[3], ratings[4])
+            ratings = []
+        else: #location name
             name = line
-    print(name)
-    for i in ratings:
-        print(ratings[i - 1])
-        
-   # writeFile(name, ratings)
+    return _reviewsList
 
 def isInt(x):       #file.read() returns a string. This checks to see if a string from the file represents an int
     try: 
@@ -120,7 +150,7 @@ def sendTweet():
     postUpdates(makeStatus())
 
 def getHighest():
-    return Reviews("I-75 MM 27 [NB]")
+    return _reviewsList.findHighest()
 def makeStatus():
     status = "#1: "
     top = getHighest()
@@ -143,4 +173,3 @@ def makeLine(top):
     line += str(top.informationRating)
     line += "\r\n"
     return line
-    
