@@ -42,11 +42,18 @@ Using terminal on Mac or Linux or Bash on Ubuntu on Windows CD into the location
 The format of the tweet is extremely important. Any variation from this format will cause the script to work improperly.
 
 @RestStopRater
+
 I-xxx MM yy [zB]
+
 a
+
 b
+
 c
+
 d
+
+Note there is only one newline between lines, one space for each whitespace, and no spaces at the end of each line.
 
 The second line, I-xxx MM yy [zB], represents the name of the rest stop. Names in the appropriate format can be found by using [this app](https://play.google.com/store/apps/details?id=com.insofttech.reststops&hl=en) for Android or a similar rest stop finding app for iOS. 
 
