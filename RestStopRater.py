@@ -10,10 +10,7 @@ import datetime
 
 now = datetime.datetime.now()  #This variable is used when building the tweet to send. The date is included to prevent duplicating tweets.
 
-CONSUMER_KEY = 'kD1k9NfDeNsaIzXr0EIUldahk'          #API keys for Twitter account @RestStopRater
-CONSUMER_SECRET = 'wSdRUZD9XEB5CxOEhciFK812QNQDonApxiM0z3sFTWXZbiGHkp'
-ACCESS_TOKEN = '935197823255109634-5AXvEZLKBrBU2iIqF74JQKeqDcY4f5g'
-ACCESS_TOKEN_SECRET = 'E6R8dHRAE5r4245LDAkpT894R8z0GluSucRFFyNs7CHVY'
+####PASTE API HERE####`
 
 api = twitter.Api(consumer_key=CONSUMER_KEY,        #Makes Api from keys
                   consumer_secret=CONSUMER_SECRET,
@@ -124,23 +121,23 @@ def readFile(_reviewsList):                      #Opens a text file, reads each 
     #I-75 MM 27 [NB]\n
     #"""
     #_reviewsList = reviewsList()
-    inFile = open("ratings.txt", 'r')
-    ratings = []
-    name = "" 
-    for line in inFile:
-        if (isInt(line)): #add rating to array
-            if (int(line) > 1000000000000000):
-                _reviewsList.insert(name, ratings[0], ratings[1], ratings[2], ratings[3], ratings[4])
-                name = line.strip("\n")
-            else:
+    inFile = open("ratings.txt", 'r') #opens the .txt document so that it's information can be used to create a linked list
+    ratings = []  
+    name = ""  
+    for line in inFile:  
+        if (isInt(line)):
+            if (int(line) > 1000000000000000):  #if the line holds the tweet ID (should be the last line in the .txt
+                _reviewsList.insert(name, ratings[0], ratings[1], ratings[2], ratings[3], ratings[4])  #create a new rating class for the last location
+                name = line.strip("\n") #store the tweet ID
+            else:  #if the line holds a rating
                 x = int(line)
-                ratings.append(x)
-        else: #If there are no ratings in the array, record the name of the location. Else add the previous location and ratings to the list and record the name of the new node. Clear array.
+                ratings.append(x)  #add the rating to the ratings list
+        else:  #if the line contains a string
             if(ratings != []):
-                _reviewsList.insert(name, ratings[0], ratings[1], ratings[2], ratings[3], ratings[4])
-            name = line.strip("\n")
-            ratings = []
-    return _reviewsList, name
+                _reviewsList.insert(name, ratings[0], ratings[1], ratings[2], ratings[3], ratings[4])  #create a new rating class for the last location
+            name = line.strip("\n")  #store the new location name
+            ratings = []  #clear the ratings list so it can accept the ratings for the new location
+    return _reviewsList, name  #returns the linked list created from the .txt doc along with the tweet ID from the last tweet
 
 def isInt(x):       #file.read() returns a string. This checks to see if a string from the file represents an int
     try:
@@ -157,11 +154,11 @@ def writeFile(llist, ID):
     #>>> writeFile(test)
     #"""
     #open ("ratings.txt", 'w').close()  #Clears all information in text file
-    outFile = open ("ratings.txt", 'w')#Opens .txt for writing
-    outFile.close()
-    outFile = open ("ratings.txt", 'w')
+    outFile = open ("ratings.txt", 'w')  #Opens .txt for writing
+    outFile.close()  #clears the .txt file
+    outFile = open ("ratings.txt", 'w')  
     temp = llist.head
-    while (temp != None):
+    while (temp != None):  #temp traverses the linked list
         outFile.write(str(temp.name) + "\r\n")
         outFile.write(str(temp.bathroomRating) + "\r\n")
         outFile.write(str(temp.foodRating) + "\r\n")
@@ -169,30 +166,30 @@ def writeFile(llist, ID):
         outFile.write(str(temp.informationRating) + "\r\n")
         outFile.write(str(temp.numberOfReviews) + "\r\n")
         temp = temp.nextPointer
-    outFile.write(ID)
+    outFile.write(ID)  #store the tweet ID at the end of the .txt
 
 #############################################################################################################################################
 #############################GET TWEETS: READS FROM TWITTER, WRITES TO ADT###################################################################
 #############################################################################################################################################
 
-def getTweets(lastID):
-    tlist = api.GetMentions(200, lastID, None, False, False, True) #deleted last parameter: False
-    revList = [i.text for i in tlist]
-    ids = [j.id_str for j in tlist]
-    return revList, ids[len(ids) - 1]
+def getTweets(lastID): #function to return new tweets as a list and the id of the last tweet retrieved
+    tlist = api.GetMentions(200, lastID, None, False, False, True) #python-twitter function to retrieve tweets
+    revList = [i.text for i in tlist] #converts tlist to an actual list 
+    ids = [j.id_str for j in tlist] #saves tweet ids to list
+    return revList, ids[len(ids) - 1] #returns list or new tweets and id
 
 
-def parseTweet(twt):
+def parseTweet(twt): #parses tweet and returns as 5 variables
     tempstr = ""
     #twt = str(twt)
     check = 1
-    for i in range(0,len(twt)-2):
-        if twt[i] == '\n' and check == 1:
+    for i in range(0,len(twt)-2): #loops through tweet character by character
+        if twt[i] == '\n' and check == 1: #skips @reststoprater at beginning of tweet
             check = 0
-        elif not(twt[i] == '\n') and check == 0:
+        elif not(twt[i] == '\n') and check == 0: #saves stop name as string
             tempstr = tempstr + twt[i]
         elif twt[i] == '\n' and check == 0:
-            return tempstr,twt[i+1],twt[i+3],twt[i+5],twt[i+7]
+            return tempstr,twt[i+1],twt[i+3],twt[i+5],twt[i+7] #returns stop name and scores
 
 #def searchList(aTweet,linList):
 #    #search linked list linlist for tweet
@@ -203,20 +200,20 @@ def parseTweet(twt):
 #        i = i.nextPointer
 #    return None
 
-def updateReviews(revList, linList):
-    for i in range(0,len(revList)-1):
-        a,b,c,d,e = parseTweet(revList[i])
+def updateReviews(revList, linList): #updates or adds new reviews in list
+    for i in range(0,len(revList)-1): #loops through list of new tweets
+        a,b,c,d,e = parseTweet(revList[i]) #parses tweets
         #temp = searchList(a,linList)
 
-        j = linList.head
+        j = linList.head #following lines search for new review location in existing reviews - previously was "searchList" function
         check = 1
         while j != None:
             if a == j.name:
-                j.add(b,c,d,e)
+                j.add(b,c,d,e) #adds to existing review if found in search
                 check = 0
             j = j.nextPointer
         if check == 1:
-            linList.insert(a,b,c,d,e,1)#create new node
+            linList.insert(a,b,c,d,e,1)#creates new review node
     return linList
 
 #############################################################################################################################################

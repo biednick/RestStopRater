@@ -24,8 +24,11 @@ Due to the method used to find the three highest rated there must be at least 4 
 Since this code is shared publically the API information for @RestStopRater has been removed. Prior to using this script, the API must be populated with keys in this format:
 
 `CONSUMER_KEY = '<KEY>'
+
 CONSUMER_SECRET = '<KEY SECRET>'
+
 ACCESS_TOKEN = '<TOKEN>'
+
 ACCESS_TOKEN_SECRET = '<TOKEN SECRET>'`
 
 This populated code block should then replace `####PASTE API HERE####` on line 13.
